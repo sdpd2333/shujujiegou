@@ -3,6 +3,7 @@
 
 void count_frequency(char *input_filename, char *output_filename) 
 {
+    // 打开文件
     FILE *input_file, *output_file;
     int character, total = 0;
     int frequency[TOTAL_CHARACTERS] = {0};
@@ -14,6 +15,7 @@ void count_frequency(char *input_filename, char *output_filename)
         return;
     }
 
+    // 计算每个字符的频率
     while ((character = fgetc(input_file)) != EOF) 
     {
         frequency[character]++;
@@ -21,6 +23,7 @@ void count_frequency(char *input_filename, char *output_filename)
     }
     fclose(input_file);
 
+    // 打开输出文件
     output_file = fopen(output_filename, "w");
     if (output_file == NULL) 
     {
@@ -28,6 +31,7 @@ void count_frequency(char *input_filename, char *output_filename)
         return;
     }
 
+    // 输出结果
     for (int i = 0; i < TOTAL_CHARACTERS; i++) 
     {
         if (frequency[i] > 0) 
