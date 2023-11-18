@@ -29,7 +29,7 @@ int comparator(const void *p, const void *q)
 }
 
 HuffmanTreeNode* pop_min(HuffmanTree* tree) {
-    HuffmanTreeNode min_node = tree->root[0];
+    HuffmanTreeNode* min_node = tree->root[0];
 
     // 把最后一个元素移动到根位置
     tree->root[0] = tree->root[--(tree->size)];
@@ -42,16 +42,16 @@ HuffmanTreeNode* pop_min(HuffmanTree* tree) {
         
         // 找到当前节点和它的子节点中最小的那个
         int smallest = i;
-        if (left < tree->size && tree->root[left].data.frequency < tree->root[smallest].data.frequency) {
+        if (left < tree->size && tree->root[left]->data.frequency < tree->root[smallest]->data.frequency) {
             smallest = left;
         }
-        if (right < tree->size && tree->root[right].data.frequency < tree->root[smallest].data.frequency) {
+        if (right < tree->size && tree->root[right]->data.frequency < tree->root[smallest]->data.frequency) {
             smallest = right;
         }
 
         // 如果当前节点不是最小的，那么就交换它和最小节点的位置，并继续向下调整
         if (smallest != i) {
-            HuffmanTreeNode temp = tree->root[i];
+            HuffmanTreeNode* temp = tree->root[i];
             tree->root[i] = tree->root[smallest];
             tree->root[smallest] = temp;
             i = smallest;
@@ -60,8 +60,9 @@ HuffmanTreeNode* pop_min(HuffmanTree* tree) {
         }
     }
 
-    return &min_node;  // 注意这里返回的是指向 min_node 的指针
+    return min_node;
 }
+
 void push_node(HuffmanTree* tree, HuffmanTreeNode* node) {
     int i = tree->size++;
 
