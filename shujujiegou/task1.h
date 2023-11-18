@@ -29,15 +29,67 @@ int comparator(const void *p, const void *q)
 }
 
 HuffmanTreeNode* pop_min(HuffmanTree* tree) {
-    // 省略实现，从树中选择并移除频率最小的节点
+    HuffmanTreeNode* min_node = tree->root[0];
+
+    // 把最后一个元素移动到根位置
+    tree->root[0] = tree->root[--(tree->size)];
+
+    // 从根开始向下调整堆
+    int i = 0;
+    while (i < tree->size) {
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+        
+        // 找到当前节点和它的子节点中最小的那个
+        int smallest = i;
+        if (left < tree->size && tree->root[left]->data.frequency < tree->root[smallest]->data.frequency) {
+            smallest = left;
+        }
+        if (right < tree->size && tree->root[right]->data.frequency < tree->root[smallest]->data.frequency) {
+            smallest = right;
+        }
+
+        // 如果当前节点不是最小的，那么就交换它和最小节点的位置，并继续向下调整
+        if (smallest != i) {
+            HuffmanTreeNode* temp = tree->root[i];
+            tree->root[i] = tree->root[smallest];
+            tree->root[smallest] = temp;
+            i = smallest;
+        } else {
+            break;
+        }
+    }
+
+    return min_node;
 }
 
 void push_node(HuffmanTree* tree, HuffmanTreeNode* node) {
-    // 省略实现，将节点添加到树中的适当位置，以保持树的排序特性
+    int i = tree->size++;
+
+    // 把新节点放到数组的末尾
+    tree->root[i] = node;
+
+    // 从新节点开始向上调整堆
+    while (i > 0) {
+        int parent = (i - 1) / 2;
+
+        // 如果新节点比它的父节点小，那么就交换它们的位置，然后继续向上调整
+        if (tree->root[i]->data.frequency < tree->root[parent]->data.frequency) {
+            HuffmanTreeNode* temp = tree->root[i];
+            tree->root[i] = tree->root[parent];
+            tree->root[parent] = temp;
+            i = parent;
+        } else {
+            break;
+        }
+    }
 }
 
+
 HuffmanTreeNode* build_huffman_tree(CharFrequency* frequency, int size) {
-    HuffmanTree tree = {NULL, size};
+    HuffmanTree tree;
+    tree.root = malloc(sizeof(HuffmanTreeNode*) * size);
+    tree.size = 0;
 
     for (int i = 0; i < size; ++i) {
         HuffmanTreeNode* node = malloc(sizeof(HuffmanTreeNode));
@@ -59,7 +111,9 @@ HuffmanTreeNode* build_huffman_tree(CharFrequency* frequency, int size) {
         push_node(&tree, parent);
     }
 
-    return tree.root;
+    HuffmanTreeNode* root = pop_min(&tree);
+    free(tree.root);
+    return root;
 }
 
 void generate_huffman_codes(HuffmanTreeNode* node, char* code, int depth, HuffmanCode* huffman_codes) {
