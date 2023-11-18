@@ -14,7 +14,7 @@ typedef struct HuffmanTreeNode {
 } HuffmanTreeNode;
 
 typedef struct {
-    HuffmanTreeNode* root;
+    HuffmanTreeNode** root;
     int size;
 } HuffmanTree;
 
