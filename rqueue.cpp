@@ -29,18 +29,18 @@ void CircularQueue::enqueue(int element) {
 }
 
 int CircularQueue::dequeue() {
-if (isEmpty()) {
-throw std::runtime_error("Error: Queue is empty!");
-} else {
-int result = queue[frontIndex];
-frontIndex = (frontIndex + 1) % QUEUE_SIZE;
-return result;
-}
+	if (isEmpty()) {
+		throw std::runtime_error("Error: Queue is empty!");
+	} else {
+		int result = queue[frontIndex];
+		frontIndex = (frontIndex + 1) % QUEUE_SIZE;
+		return result;
+	}
 }
 int CircularQueue::front() {
 if (isEmpty()) {
-throw std::runtime_error("Error: Queue is empty!");
+	throw std::runtime_error("Error: Queue is empty!");
 } else {
-return queue[frontIndex];
-}
+	return queue[frontIndex];
+	}
 }
